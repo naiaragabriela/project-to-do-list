@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Design;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 using ToDoList;
@@ -117,12 +118,37 @@ internal class Program
                 Thread.Sleep(1000);
             }
         }
-    }
 
+        void WriteFilePerson(List<Person> people)
+        {
+            string person = "";
+            foreach (Person personList in people)
+            {
+                person += personList.ToString() + "\n";
+            }
+            try
+            {
+                StreamWriter sw = new StreamWriter("ListPerson.txt");
+                if (!string.IsNullOrWhiteSpace(person))
+                {
+                    sw.WriteLine(person);
+                }
+                sw.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Console.WriteLine("Registro Gravado com Sucesso!");
+                Thread.Sleep(1000);
+            }
+        }
+    }
     private static void PrintTask()
     {
     }
-
     private static void EditTask()
     {
         //foreach (var item in listTodo)
