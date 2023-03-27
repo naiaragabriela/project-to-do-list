@@ -52,6 +52,7 @@ internal class Program
             }
         } while (option != 4);
     }
+    
     private static void PrintTask(List<ToDo> listTodo)
     {
         foreach (var item in listTodo)
@@ -59,7 +60,7 @@ internal class Program
             Console.WriteLine(item.ToFile());
         }
     }
-
+    
     private static int MenuEditTask()
     {
         int options;
@@ -78,9 +79,6 @@ internal class Program
         return options;
     }
 
-    private static void PrintTask()
-    {
-    }
     private static int Menu(int options)
     {
         int option;
@@ -96,6 +94,7 @@ internal class Program
         Console.WriteLine("\n\n");
         return options;
     }
+    
     private static List<ToDo> LoadFromFile(List<ToDo> listTodo)
     {
         if (!File.Exists("ListToDo.txt"))
@@ -254,34 +253,24 @@ internal class Program
         }
     }
 
-
-
-
     private static ToDo TaskConcluided(List<ToDo> listTodo)
     {
         Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
         var finished = Console.ReadLine();
         Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
-        Console.WriteLine("1-Alterar Status para finalizada |   2- Alterar Status para não finalizada");
+        Console.WriteLine("1-Alterar Status para finalizada | 2- Alterar Status para não finalizada");
         int change = int.Parse(Console.ReadLine());
-
         foreach (var item in listTodo)
         {
             if (item.Description.Contains(finished))
             {
-                if (change == 1)
-                {
-                    item.Status = true;
-                }
-                if (change == 2)
-                {
-                    item.Status = false;
-                }
+                item.SetStatus();
                 return item;
             }
         }
         return null;
     }
+
     private static void EditTask(List<ToDo> listTodo)
     {
         foreach (var item in listTodo)
@@ -299,7 +288,7 @@ internal class Program
                         TaskConcluided(listTodo);
                         break;
                     case 2:
-                        EditAnyTask();
+                        //EditAnyTask();
                         break;
                     case 3:
                         break;
@@ -314,4 +303,5 @@ internal class Program
             }
         }
     }
+
 }

@@ -12,7 +12,7 @@ namespace ToDoList
         public bool Status { get; set; }
 
         public ToDo()
-        {}
+        { }
         public ToDo(string description, Person person)
         {
             var construtionID = Guid.NewGuid();
@@ -28,15 +28,31 @@ namespace ToDoList
         {
             return $"{Id}|{CriatedDate}|{Description}|{Status}|{DueDate}|{Category}|{Person}";
         }
-        public string ToFile() 
-        { 
-        return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
+        public string ToFile()
+        {
+            return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
         }
 
         public bool SetStatus()
         {
-            return false ;
+            if (this.Status == true)
+            {
+                return this.Status = false;
+
+            }
+            else
+            {
+                return this.Status = true;
+            }
+
         }
+        //public string SetPerson()
+        //{
+
+        //    return null;
+
+
+        //}
     }
-    
+
 }
