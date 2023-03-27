@@ -6,7 +6,10 @@ namespace ToDoList
     {
         public string Name { get; set; }
         public string Id { get; set; }
+        public Person()
+        {
 
+        }
         public Person(string name, string id)
         {
             var construtionID = Guid.NewGuid();
@@ -14,12 +17,11 @@ namespace ToDoList
             Id = id;
             Name = name;
         }
-
         public override string ToString()
         {
             return $"{Id}|{Name}";
         }
-        public string ToUser()
+        public string SetName()
         {
             return $"Id pessoa: {Id} \nNome: {Name}\n";
         }

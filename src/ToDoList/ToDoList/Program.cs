@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.Design;
+using System.Xml.Linq;
+using Microsoft.VisualBasic;
 using ToDoList;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        List<Person> pessoas = new List<Person>();
         List<Category> categorias = new List<Category>();
 
         LoadFromFile();
@@ -13,6 +14,9 @@ internal class Program
         int option = 0;
         do
         {
+            var listTodo = LoadFromFile();
+            var person = LoadFromFilePerson();
+
             option = Menu(option);
             switch (option)
             {
@@ -34,6 +38,58 @@ internal class Program
                     break;
             }
         } while (option != 4);
+
+        List<ToDo> LoadFromFile()
+        {
+            if (!File.Exists("ListToDo.txt"))
+            {
+                StreamWriter sw = new StreamWriter("ListToDo.txt");
+                sw.Close();
+            }
+            StreamReader sr = new StreamReader("ListToDo.txt");
+            string textList = "";
+            List<ToDo> listTodo = new List<ToDo>();
+            while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
+            {
+                var values = textList.Split('|');
+                ToDo newTodo = new ToDo();
+                newTodo.Id = values[0];
+                newTodo.CriatedDate = values[1];
+                newTodo.Category = values[2]; 
+                newTodo.Description = values[3];
+                Person person = new Person();
+                person.Id = values[4];
+                person.Name= values[5];
+                newTodo.Person = person;
+                newTodo.Status = values[6];
+                newTodo.DueDate = values[7];
+                listTodo.Add(newTodo);
+            }
+            sr.Close();
+            return listTodo;
+        }
+
+        List<Person> LoadFromFilePerson()
+        {
+            if (!File.Exists("ListPerson.txt"))
+            {
+                StreamWriter sw = new StreamWriter("ListPerson.txt");
+                sw.Close();
+            }
+            StreamReader sr = new StreamReader("ListPerson.txt");
+            string personList = "";
+            List<Person> person = new List<Person>();
+            while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
+            {
+                var values = personList.Split('|');
+                Person newPerson = new Person();
+                newPerson.Id = values[0];
+                newPerson.Name = values[1];
+                person.Add(newPerson);
+            }
+            sr.Close();
+            return person;
+        }
     }
 
     private static void PrintTask()
@@ -74,6 +130,7 @@ internal class Program
     private static void TaskConcluided()
     {
     }
+
 
     private static int MenuEditTask()
     {
