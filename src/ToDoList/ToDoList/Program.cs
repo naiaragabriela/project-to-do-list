@@ -7,8 +7,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        List<Category> categorias = new List<Category>();
-
         LoadFromFile();
 
         int option = 0;
