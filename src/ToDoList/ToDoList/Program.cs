@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -18,8 +19,8 @@ internal class Program
         category.Add("Profissional");
 
         int option = 0;
-        listTodo = LoadFromFile();
-        person = LoadFromFilePerson();
+        listTodo = LoadFromFile(listTodo);
+        person = LoadFromFilePerson(person);
 
         WriteFilePerson(person);
         do
@@ -32,11 +33,11 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
-                    listTodo.Add(CreateTask());
+                    listTodo.Add(CreateTask(person));
                     WriteFileToDo(listTodo);
                     break;
                 case 2:
-                    listTodo.Remove(RemoveTask());
+                    listTodo.Remove(RemoveTask(listTodo));
                     WriteFileToDo(listTodo);
                     break;
                 case 3:
@@ -50,263 +51,10 @@ internal class Program
                     break;
             }
         } while (option != 4);
-
-        List<ToDo> LoadFromFile()
-        {
-            if (!File.Exists("ListToDo.txt"))
-            {
-                StreamWriter sw = new StreamWriter("ListToDo.txt");
-                sw.Close();
-            }
-            StreamReader sr = new StreamReader("ListToDo.txt");
-            string textList = "";
-
-            while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
-            {
-                var values = textList.Split('|');
-                ToDo newTodo = new ToDo();
-                newTodo.Id = values[0];
-                newTodo.CriatedDate = DateTime.Parse(values[1]);
-                newTodo.Description = values[2];
-                newTodo.Status = bool.Parse(values[3]);
-                newTodo.DueDate = DateTime.Parse(values[4]);
-                newTodo.Category = values[5];
-                Person person = new Person();
-                person.Id = values[6];
-                person.Name = values[7];
-                newTodo.Person = person;
-                listTodo.Add(newTodo);
-            }
-            sr.Close();
-            return listTodo;
-        }
-
-        List<Person> LoadFromFilePerson()
-        {
-            if (!File.Exists("ListPerson.txt"))
-            {
-                StreamWriter sw = new StreamWriter("ListPerson.txt");
-                sw.Close();
-            }
-            StreamReader sr = new StreamReader("ListPerson.txt");
-            string personList = "";
-
-            while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
-            {
-                var values = personList.Split('|');
-                Person newPerson = new Person();
-                newPerson.Id = values[0];
-                newPerson.Name = values[1];
-                person.Add(newPerson);
-            }
-            sr.Close();
-            if (person.Count == 0)
-            {
-                Console.WriteLine("Digite seu nome");
-                var namePerson = Console.ReadLine();
-                Person personOwner = new Person(namePerson);
-                person.Add(personOwner);
-            }
-            return person;
-        }
-
-        void WriteFileToDo(List<ToDo> list)
-        {
-            string toDo = "";
-            foreach (ToDo textList in list)
-            {
-                toDo += textList.ToString() + "\n";
-            }
-            try
-            {
-                StreamWriter sw = new StreamWriter("ListToDo.txt");
-                if (!string.IsNullOrWhiteSpace(toDo))
-                {
-                    sw.WriteLine(toDo);
-                }
-                sw.Close();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                Console.WriteLine("Registro Gravado com Sucesso!");
-                Thread.Sleep(1000);
-            }
-        }
-
-        ToDo RemoveTask()
-        {
-            Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
-            var palavra = Console.ReadLine();
-
-            foreach (var item in listTodo)
-            {
-                if (item.Description.Contains(palavra))
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-
-        void WriteFilePerson(List<Person> people)
-        {
-            string person = "";
-            foreach (Person personList in people)
-            {
-                person += personList.ToString() + "\n";
-            }
-            try
-            {
-                StreamWriter sw = new StreamWriter("ListPerson.txt");
-                if (!string.IsNullOrWhiteSpace(person))
-                {
-                    sw.WriteLine(person);
-                }
-                sw.Close();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                Console.WriteLine("Registro Gravado com Sucesso!");
-                Thread.Sleep(1000);
-            }
-        }
-
-        ToDo CreateTask()
-        {
-            Console.WriteLine("Digite a descrição para a criação da tarefa: ");
-            string descrição = Console.ReadLine();
-            foreach (var item in person)
-            {
-                Console.WriteLine(item.ToString());
-            }
-            Console.Write("Digite o nome da pessoa para ser a responsável pela tarefa: ");
-            string nome = Console.ReadLine();
-
-            foreach (var item in person)
-            {
-                if (item.Name.Equals(nome))
-                {
-                    ToDo task = new ToDo(descrição, item);
-                    return task;
-                }
-            }
-            return null;
-        }
-
-        void PrintPerson(List<Person> person)
-        {
-            foreach (var item in person)
-            {
-                Console.WriteLine(item.SetName());
-            }
-        }
-
-        ToDo TaskConcluided()
-        {
-            Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
-            var finished = Console.ReadLine();
-            Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
-            Console.WriteLine("1-Alterar Status para finalizada |   2- Alterar Status para não finalizada");
-            int change = int.Parse(Console.ReadLine());
-
-            foreach (var item in listTodo)
-            {
-                if (item.Description.Contains(finished))
-                {
-                    if(change == 1)
-                    {
-                        item.Status = true;
-                    }
-                    if (change == 2)
-                    {
-                        item.Status = false;
-                    }
-                    return item;
-                }
-            } 
-            return null;
-        }
-
-        void EditTask(List<ToDo> listTodo)
-        {
-            foreach (var item in listTodo)
-            {
-                int x = 1;
-                while (x != 4)
-                {
-                    x = MenuEditTask();
-                    switch (x)
-                    {
-                        default:
-                            Console.WriteLine("Opção inválida!!");
-                            break;
-                        case 1:
-                            TaskConcluided();
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-            }
-        }
     }
-    private static void EditTask(List<ToDo> listTodo)
-    {
-        foreach (var item in listTodo)
-        {
-            int x = 1;
-            while (x != 4)
-            {
-                x = MenuEditTask();
-                switch (x)
-                {
-                    default:
-                        Console.WriteLine("Opção inválida!!");
-                        break;
-                    case 1:
-
-                        break;
-                    case 2:
-                        EditAnyTask();
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        PrintTask(listTodo);
-                        break;
-                    case 5:
-                        break;
-                    case 6:
-                        break;
-                }
-            }
-        }
-    }
-
-    private static void EditAnyTask()
-    {
-
-    }
-
     private static void PrintTask(List<ToDo> listTodo)
     {
-        foreach(var item in listTodo)
+        foreach (var item in listTodo)
         {
             Console.WriteLine(item.ToFile());
         }
@@ -333,28 +81,6 @@ internal class Program
     private static void PrintTask()
     {
     }
-
-    private static List<ToDo> LoadFromFile()
-    {
-        if (!File.Exists("ListToDo.txt"))
-        {
-            StreamWriter sw = new StreamWriter("ListToDo.txt");
-            sw.Close();
-        }
-        StreamReader sr = new StreamReader("ListToDo.txt");
-        string textList = "";
-        List<ToDo> listTodo = new List<ToDo>();
-        while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
-        {
-            var values = textList.Split('|');
-
-        }
-        sr.Close();
-        return listTodo;
-    }
-
-
-
     private static int Menu(int options)
     {
         int option;
@@ -369,5 +95,223 @@ internal class Program
         options = int.Parse(Console.ReadLine());
         Console.WriteLine("\n\n");
         return options;
+    }
+    private static List<ToDo> LoadFromFile(List<ToDo> listTodo)
+    {
+        if (!File.Exists("ListToDo.txt"))
+        {
+            StreamWriter sw = new StreamWriter("ListToDo.txt");
+            sw.Close();
+        }
+        StreamReader sr = new StreamReader("ListToDo.txt");
+        string textList = "";
+
+        while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
+        {
+            var values = textList.Split('|');
+            ToDo newTodo = new ToDo();
+            newTodo.Id = values[0];
+            newTodo.CriatedDate = DateTime.Parse(values[1]);
+            newTodo.Description = values[2];
+            newTodo.Status = bool.Parse(values[3]);
+            newTodo.DueDate = DateTime.Parse(values[4]);
+            newTodo.Category = values[5];
+            Person person = new Person();
+            person.Id = values[6];
+            person.Name = values[7];
+            newTodo.Person = person;
+            listTodo.Add(newTodo);
+        }
+        sr.Close();
+        return listTodo;
+    }
+
+    private static List<Person> LoadFromFilePerson(List<Person> person)
+    {
+        if (!File.Exists("ListPerson.txt"))
+        {
+            StreamWriter sw = new StreamWriter("ListPerson.txt");
+            sw.Close();
+        }
+        StreamReader sr = new StreamReader("ListPerson.txt");
+        string personList = "";
+
+        while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
+        {
+            var values = personList.Split('|');
+            Person newPerson = new Person();
+            newPerson.Id = values[0];
+            newPerson.Name = values[1];
+            person.Add(newPerson);
+        }
+        sr.Close();
+        if (person.Count == 0)
+        {
+            Console.WriteLine("Digite seu nome");
+            var namePerson = Console.ReadLine();
+            Person personOwner = new Person(namePerson);
+            person.Add(personOwner);
+        }
+        return person;
+    }
+
+    private static void WriteFileToDo(List<ToDo> list)
+    {
+        string toDo = "";
+        foreach (ToDo textList in list)
+        {
+            toDo += textList.ToString() + "\n";
+        }
+        try
+        {
+            StreamWriter sw = new StreamWriter("ListToDo.txt");
+            if (!string.IsNullOrWhiteSpace(toDo))
+            {
+                sw.WriteLine(toDo);
+            }
+            sw.Close();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            Console.WriteLine("Registro Gravado com Sucesso!");
+            Thread.Sleep(1000);
+        }
+    }
+
+    private static ToDo RemoveTask(List<ToDo> listTodo)
+    {
+        Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
+        var palavra = Console.ReadLine();
+
+        foreach (var item in listTodo)
+        {
+            if (item.Description.Contains(palavra))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private static void WriteFilePerson(List<Person> people)
+    {
+        string person = "";
+        foreach (Person personList in people)
+        {
+            person += personList.ToString() + "\n";
+        }
+        try
+        {
+            StreamWriter sw = new StreamWriter("ListPerson.txt");
+            if (!string.IsNullOrWhiteSpace(person))
+            {
+                sw.WriteLine(person);
+            }
+            sw.Close();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            Console.WriteLine("Registro Gravado com Sucesso!");
+            Thread.Sleep(1000);
+        }
+    }
+
+    private static ToDo CreateTask(List<Person> person)
+    {
+        Console.WriteLine("Digite a descrição para a criação da tarefa: ");
+        string descrição = Console.ReadLine();
+        foreach (var item in person)
+        {
+            Console.WriteLine(item.ToString());
+        }
+        Console.Write("Digite o nome da pessoa para ser a responsável pela tarefa: ");
+        string nome = Console.ReadLine();
+
+        foreach (var item in person)
+        {
+            if (item.Name.Equals(nome))
+            {
+                ToDo task = new ToDo(descrição, item);
+                return task;
+            }
+        }
+        return null;
+    }
+
+    private static void PrintPerson(List<Person> person)
+    {
+        foreach (var item in person)
+        {
+            Console.WriteLine(item.SetName());
+        }
+    }
+
+
+
+
+    private static ToDo TaskConcluided(List<ToDo> listTodo)
+    {
+        Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
+        var finished = Console.ReadLine();
+        Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
+        Console.WriteLine("1-Alterar Status para finalizada |   2- Alterar Status para não finalizada");
+        int change = int.Parse(Console.ReadLine());
+
+        foreach (var item in listTodo)
+        {
+            if (item.Description.Contains(finished))
+            {
+                if (change == 1)
+                {
+                    item.Status = true;
+                }
+                if (change == 2)
+                {
+                    item.Status = false;
+                }
+                return item;
+            }
+        }
+        return null;
+    }
+    private static void EditTask(List<ToDo> listTodo)
+    {
+        foreach (var item in listTodo)
+        {
+            int x = 1;
+            while (x != 4)
+            {
+                x = MenuEditTask();
+                switch (x)
+                {
+                    default:
+                        Console.WriteLine("Opção inválida!!");
+                        break;
+                    case 1:
+                        TaskConcluided(listTodo);
+                        break;
+                    case 2:
+                        EditAnyTask();
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        PrintTask(listTodo);
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                }
+            }
+        }
     }
 }

@@ -32,6 +32,11 @@ namespace ToDoList
         { 
         return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
         }
+
+        public bool SetStatus()
+        {
+            return false ;
+        }
     }
     
 }
