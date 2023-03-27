@@ -21,7 +21,6 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
-                    CreateTask();
                     break;
                 case 2:
                     RemoveTask();
@@ -31,18 +30,43 @@ internal class Program
                     MenuEditTask();
                     break;
                 case 4:
+                    break;
+                case 5:
+                    PrintTask();
+                    break;
+                case 6:
                     System.Environment.Exit(0);
                     break;
             }
-        }while (option != 4);
+        } while (option != 4);
+    }
+
+    private static void PrintTask()
+    {
     }
 
     private static void EditTask()
     {
-        do
+        foreach (var item in listTodo)
         {
+            int x = 1;
 
-        } while ();
+            while (x != 4)
+            {
+                x = MenuEditTask();
+                switch (x)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
+            }
+        }
     }
 
     private static int MenuEditTask()
@@ -51,9 +75,10 @@ internal class Program
         Console.WriteLine("Menu de opções para edição das tarefas");
         Console.WriteLine("1 - Marcar tarefa como concluída");
         Console.WriteLine("2 - Mudar a tarefa de concluída para não concluída");
-        Console.WriteLine("3 - Editar Pessoa");
+        Console.WriteLine("3 - Editar/Adicionar Tarefas");
         Console.WriteLine("4 - Mudar categorias da tarefa");
-        Console.WriteLine("5 - Sair");
+        Console.WriteLine("5 - Mostrar tarefas");
+        Console.WriteLine("6 - Sair");
         Console.WriteLine("Escolha uma das opções");
         options = int.Parse(Console.ReadLine());
         return options;
@@ -61,7 +86,7 @@ internal class Program
 
     List<ToDo> LoadFromFile()
     {
-        if(!File.Exists("ListToDo.txt"))
+        if (!File.Exists("ListToDo.txt"))
         {
             StreamWriter sw = new StreamWriter("ListToDo.txt");
             sw.Close();
@@ -69,8 +94,8 @@ internal class Program
         StreamReader sr = new StreamReader("ListToDo.txt");
         string textList = "";
         List<ToDo> listTodo = new List<ToDo>();
-        
-        // falta!!! ler o arquivo que está salvo e transformar cada informação da lista em objeto
+
+        //falta!!! ler o arquivo que está salvo e transformar cada informação da lista em objeto
         sr.Close();
         return listTodo;
     }
