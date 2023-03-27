@@ -13,21 +13,24 @@ namespace ToDoList
 
         public ToDo()
         {}
-        public ToDo(string id, DateTime date)
+        public ToDo(string description, Person person)
         {
             var construtionID = Guid.NewGuid();
-            id = construtionID.ToString();
+            var id = construtionID.ToString();
             Id = id;
-            date = DateTime.Now;
+            var date = DateTime.Now;
             CriatedDate = date;
+            Description = description;
+            //DueDate = duodate;
+            Person = person;
         }
         public override string ToString()
         {
-            return $"{Id}|{CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}|";
+            return $"{Id}|{CriatedDate}|{Description}|{Status}|{DueDate}|{Category}|{Person}";
         }
         public string ToFile() 
         { 
-        return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}|";
+        return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
         }
     }
     

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 using ToDoList;
@@ -8,15 +9,22 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        List <string> category = new List <string> ();
+        List<string> category = new List<string>();
+        List<ToDo> listTodo = new List<ToDo>();
+        List<Person> person = new List<Person>();
+
         category.Add("Importante");
         category.Add("Pessoal");
+        category.Add("Profissional");
 
         int option = 0;
+        listTodo = LoadFromFile();
+        person = LoadFromFilePerson();
+
+        WriteFilePerson(person);
         do
         {
-            var listTodo = LoadFromFile();
-            var person = LoadFromFilePerson();
+
 
             option = Menu(option);
             switch (option)
@@ -25,14 +33,18 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
+                    listTodo.Add(CreateTask());
+                    WriteFileToDo(listTodo);
                     break;
                 case 2:
-                    RemoveTask();
+                    listTodo.Remove(RemoveTask());
+                    WriteFileToDo(listTodo);
                     break;
                 case 3:
                     MenuEditTask();
                     break;
                 case 4:
+                    PrintPerson(person);
                     break;
                 case 5:
                     System.Environment.Exit(0);
@@ -49,21 +61,21 @@ internal class Program
             }
             StreamReader sr = new StreamReader("ListToDo.txt");
             string textList = "";
-            List<ToDo> listTodo = new List<ToDo>();
+
             while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
             {
                 var values = textList.Split('|');
                 ToDo newTodo = new ToDo();
                 newTodo.Id = values[0];
                 newTodo.CriatedDate = DateTime.Parse(values[1]);
-                newTodo.Category = values[2]; 
-                newTodo.Description = values[3];
+                newTodo.Description = values[2];
+                newTodo.Status = bool.Parse(values[3]);
+                newTodo.DueDate = DateTime.Parse(values[4]);
+                newTodo.Category = values[5];
                 Person person = new Person();
-                person.Id = values[4];
-                person.Name= values[5];
+                person.Id = values[6];
+                person.Name = values[7];
                 newTodo.Person = person;
-                newTodo.Status = bool.Parse(values[6]);
-                newTodo.DueDate = DateTime.Parse(values[7]);
                 listTodo.Add(newTodo);
             }
             sr.Close();
@@ -79,7 +91,7 @@ internal class Program
             }
             StreamReader sr = new StreamReader("ListPerson.txt");
             string personList = "";
-            List<Person> person = new List<Person>();
+
             while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
             {
                 var values = personList.Split('|');
@@ -89,11 +101,11 @@ internal class Program
                 person.Add(newPerson);
             }
             sr.Close();
-            if (person == null)
+            if (person.Count == 0)
             {
                 Console.WriteLine("Digite seu nome");
                 var namePerson = Console.ReadLine();
-                Person personOwner= new Person(namePerson);
+                Person personOwner = new Person(namePerson);
                 person.Add(personOwner);
             }
             return person;
@@ -104,7 +116,7 @@ internal class Program
             string toDo = "";
             foreach (ToDo textList in list)
             {
-                toDo += textList.ToString()+ "\n";
+                toDo += textList.ToString() + "\n";
             }
             try
             {
@@ -126,6 +138,20 @@ internal class Program
             }
         }
 
+        ToDo RemoveTask()
+        {
+            Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
+            var palavra = Console.ReadLine();
+
+            foreach (var item in listTodo)
+            {
+                if (item.Description.Contains(palavra))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
         void WriteFilePerson(List<Person> people)
         {
             string person = "";
@@ -152,40 +178,71 @@ internal class Program
                 Thread.Sleep(1000);
             }
         }
+        ToDo CreateTask()
+        {
+            Console.WriteLine("Digite a descrição para a criação da tarefa: ");
+            string descrição = Console.ReadLine();
+            foreach (var item in person)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Console.Write("Digite o nome da pessoa para ser a responsável pela tarefa: ");
+            string nome = Console.ReadLine();
+
+            foreach (var item in person)
+            {
+                if (item.Name.Equals(nome))
+                {
+                    ToDo task = new ToDo(descrição, item);
+                    return task;
+                }
+            }
+            return null;
+        }
+        void PrintPerson(List<Person> person)
+        {
+            foreach(var item in person)
+            {
+                Console.WriteLine(item.SetName());
+            }
+        }
     }
+
+
     private static void PrintTask()
     {
     }
-    private static void EditTask()
+    private static void EditTask(List<ToDo> listTodo)
     {
-        //foreach (var item in listTodo)
-        //{
-        int x = 1;
-        while (x != 4)
+        foreach (var item in listTodo)
         {
-            x = MenuEditTask();
-            switch (x)
+            int x = 1;
+            while (x != 4)
             {
-                default:
-                    Console.WriteLine("Opção inválida!!");
-                    break;
-                case 1:
-                    TaskConcluided();
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
+                x = MenuEditTask();
+                switch (x)
+                {
+                    default:
+                        Console.WriteLine("Opção inválida!!");
+                        break;
+                    case 1:
+                        TaskConcluided();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                }
             }
         }
-        //}
     }
+
 
     private static void TaskConcluided()
     {
@@ -228,12 +285,7 @@ internal class Program
     }
              
 
-    private static void RemoveTask()
-    {
-    }
-    private static void CreateTask()
-    {
-    }
+
     private static int Menu(int options)
     {
         int option;
