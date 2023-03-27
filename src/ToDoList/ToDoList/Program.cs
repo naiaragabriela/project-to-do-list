@@ -25,7 +25,6 @@ internal class Program
         do
         {
 
-
             option = Menu(option);
             switch (option)
             {
@@ -152,6 +151,7 @@ internal class Program
             }
             return null;
         }
+
         void WriteFilePerson(List<Person> people)
         {
             string person = "";
@@ -178,6 +178,7 @@ internal class Program
                 Thread.Sleep(1000);
             }
         }
+
         ToDo CreateTask()
         {
             Console.WriteLine("Digite a descrição para a criação da tarefa: ");
@@ -199,6 +200,7 @@ internal class Program
             }
             return null;
         }
+
         void PrintPerson(List<Person> person)
         {
             foreach (var item in person)
@@ -206,9 +208,64 @@ internal class Program
                 Console.WriteLine(item.SetName());
             }
         }
+
+        ToDo TaskConcluided()
+        {
+            Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
+            var finished = Console.ReadLine();
+            Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
+            Console.WriteLine("1-Alterar Status para finalizada |   2- Alterar Status para não finalizada");
+            int change = int.Parse(Console.ReadLine());
+
+            foreach (var item in listTodo)
+            {
+                if (item.Description.Contains(finished))
+                {
+                    if(change == 1)
+                    {
+                        item.Status = true;
+                    }
+                    if (change == 2)
+                    {
+                        item.Status = false;
+                    }
+                    return item;
+                }
+            } 
+            return null;
+        }
+
+        void EditTask(List<ToDo> listTodo)
+        {
+            foreach (var item in listTodo)
+            {
+                int x = 1;
+                while (x != 4)
+                {
+                    x = MenuEditTask();
+                    switch (x)
+                    {
+                        default:
+                            Console.WriteLine("Opção inválida!!");
+                            break;
+                        case 1:
+                            TaskConcluided();
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+            }
+        }
     }
-
-
     private static void EditTask(List<ToDo> listTodo)
     {
         foreach (var item in listTodo)
@@ -255,10 +312,6 @@ internal class Program
         }
     }
 
-
-    private static void TaskConcluided()
-    {
-    }
     private static int MenuEditTask()
     {
         int options;
@@ -275,6 +328,10 @@ internal class Program
 
         options = int.Parse(Console.ReadLine());
         return options;
+    }
+
+    private static void PrintTask()
+    {
     }
 
     private static List<ToDo> LoadFromFile()
@@ -295,7 +352,7 @@ internal class Program
         sr.Close();
         return listTodo;
     }
-             
+
 
 
     private static int Menu(int options)
