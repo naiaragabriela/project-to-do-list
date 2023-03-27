@@ -90,6 +90,33 @@ internal class Program
             sr.Close();
             return person;
         }
+
+        void WriteFileToDo(List<ToDo> list)
+        {
+            string toDo = "";
+            foreach (ToDo textList in list)
+            {
+                toDo += textList.ToString()+ "\n";
+            }
+            try
+            {
+                StreamWriter sw = new StreamWriter("ListToDo.txt");
+                if (!string.IsNullOrWhiteSpace(toDo))
+                {
+                    sw.WriteLine(toDo);
+                }
+                sw.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Console.WriteLine("Registro Gravado com Sucesso!");
+                Thread.Sleep(1000);
+            }
+        }
     }
 
     private static void PrintTask()
