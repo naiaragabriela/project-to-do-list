@@ -17,10 +17,12 @@ internal class Program
         category.Add("Profissional");
 
         int option = 0;
+        listTodo = LoadFromFile();
+        person = LoadFromFilePerson();
+        WriteFilePerson(person);
         do
         {
-            listTodo = LoadFromFile();
-            person = LoadFromFilePerson();
+
 
             option = Menu(option);
             switch (option)
@@ -29,6 +31,8 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
+                    listTodo.Add(CreateTask());
+                    WriteFileToDo(listTodo);
                     break;
                 case 2:
                     listTodo.Remove(RemoveTask());
@@ -60,14 +64,14 @@ internal class Program
                 ToDo newTodo = new ToDo();
                 newTodo.Id = values[0];
                 newTodo.CriatedDate = DateTime.Parse(values[1]);
-                newTodo.Category = values[2];
-                newTodo.Description = values[3];
+                newTodo.Description = values[2];
+                newTodo.Status = bool.Parse(values[3]);
+                newTodo.DueDate = DateTime.Parse(values[4]);
+                newTodo.Category = values[5];
                 Person person = new Person();
-                person.Id = values[4];
-                person.Name = values[5];
+                person.Id = values[6];
+                person.Name = values[7];
                 newTodo.Person = person;
-                newTodo.Status = bool.Parse(values[6]);
-                newTodo.DueDate = DateTime.Parse(values[7]);
                 listTodo.Add(newTodo);
             }
             sr.Close();
@@ -101,7 +105,7 @@ internal class Program
             string toDo = "";
             foreach (ToDo textList in list)
             {
-                toDo += textList.ToString()+ "\n";
+                toDo += textList.ToString() + "\n";
             }
             try
             {
@@ -126,48 +130,17 @@ internal class Program
         ToDo RemoveTask()
         {
             Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
+            var palavra = Console.ReadLine();
+
             foreach (var item in listTodo)
             {
-                return item;
+                if (item.Description.Contains(palavra))
+                {
+                    return item;
+                }
             }
             return null;
         }
-
-
-        void EditTask()
-        {
-            foreach (var item in listTodo)
-            {
-                int x = 1;
-                while (x != 4)
-                {
-                    x = MenuEditTask();
-                    switch (x)
-                    {
-                        default:
-                            Console.WriteLine("Opção inválida!!");
-                            break;
-                        case 1:
-                            TaskConcluided();
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
-    private static void PrintTask()
-    {
         void WriteFilePerson(List<Person> people)
         {
             string person = "";
@@ -195,38 +168,39 @@ internal class Program
             }
         }
     }
+
     private static void PrintTask()
     {
     }
-    private static void EditTask()
+    private static void EditTask(List<ToDo> listTodo)
     {
-        //foreach (var item in listTodo)
-        //{
-        int x = 1;
-        while (x != 4)
+        foreach (var item in listTodo)
         {
-            x = MenuEditTask();
-            switch (x)
+            int x = 1;
+            while (x != 4)
             {
-                default:
-                    Console.WriteLine("Opção inválida!!");
-                    break;
-                case 1:
-                    TaskConcluided();
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
+                x = MenuEditTask();
+                switch (x)
+                {
+                    default:
+                        Console.WriteLine("Opção inválida!!");
+                        break;
+                    case 1:
+                        TaskConcluided();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                }
             }
         }
-        //}
     }
 
 
@@ -273,8 +247,13 @@ internal class Program
     }
 
 
-    private static void CreateTask()
+    private static ToDo CreateTask()
     {
+        Console.WriteLine("Digite a descrição para a criação da tarefa: ");
+        string descrição = Console.ReadLine();
+
+        ToDo task = new ToDo(descrição);
+        return task;
     }
 
     private static int Menu(int options)
