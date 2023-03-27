@@ -28,7 +28,8 @@ internal class Program
                     RemoveTask();
                     break;
                 case 3:
-                    MenuTask();
+                    EditTask();
+                    MenuEditTask();
                     break;
                 case 4:
                     System.Environment.Exit(0);
@@ -37,9 +38,15 @@ internal class Program
         }while (option != 4);
     }
 
+    private static void EditTask()
+    {
+        do
+        {
 
+        } while ();
+    }
 
-    private static void MenuTask()
+    private static int MenuEditTask()
     {
         int options;
         Console.WriteLine("Menu de opções para edição das tarefas");
@@ -48,6 +55,9 @@ internal class Program
         Console.WriteLine("3 - Editar Pessoa");
         Console.WriteLine("4 - Mudar categorias da tarefa");
         Console.WriteLine("5 - Sair");
+        Console.WriteLine("Escolha uma das opções");
+        options = int.Parse(Console.ReadLine());
+        return options;
     }
 
     private static void LoadFromFile()
