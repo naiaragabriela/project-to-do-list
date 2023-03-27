@@ -7,15 +7,19 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        List <string> category = new List <string> ();
+        List<string> category = new List<string>();
+        List<ToDo> listTodo = new List<ToDo>();
+        List<Person> person = new List<Person>();
+
         category.Add("Importante");
         category.Add("Pessoal");
+        category.Add("Profissional");
 
         int option = 0;
         do
         {
-            var listTodo = LoadFromFile();
-            var person = LoadFromFilePerson();
+            listTodo = LoadFromFile();
+            person = LoadFromFilePerson();
 
             option = Menu(option);
             switch (option)
@@ -26,7 +30,7 @@ internal class Program
                 case 1:
                     break;
                 case 2:
-                    RemoveTask();
+                    listTodo.Remove(RemoveTask());
                     break;
                 case 3:
                     MenuEditTask();
@@ -48,18 +52,18 @@ internal class Program
             }
             StreamReader sr = new StreamReader("ListToDo.txt");
             string textList = "";
-            List<ToDo> listTodo = new List<ToDo>();
+
             while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
             {
                 var values = textList.Split('|');
                 ToDo newTodo = new ToDo();
                 newTodo.Id = values[0];
                 newTodo.CriatedDate = DateTime.Parse(values[1]);
-                newTodo.Category = values[2]; 
+                newTodo.Category = values[2];
                 newTodo.Description = values[3];
                 Person person = new Person();
                 person.Id = values[4];
-                person.Name= values[5];
+                person.Name = values[5];
                 newTodo.Person = person;
                 newTodo.Status = bool.Parse(values[6]);
                 newTodo.DueDate = DateTime.Parse(values[7]);
@@ -78,7 +82,7 @@ internal class Program
             }
             StreamReader sr = new StreamReader("ListPerson.txt");
             string personList = "";
-            List<Person> person = new List<Person>();
+
             while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
             {
                 var values = personList.Split('|');
@@ -90,42 +94,54 @@ internal class Program
             sr.Close();
             return person;
         }
+
+        ToDo RemoveTask()
+        {
+            Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
+            foreach (var item in listTodo)
+            {
+                return item;
+            }
+            return null;
+        }
+
+
+        void EditTask()
+        {
+            foreach (var item in listTodo)
+            {
+                int x = 1;
+                while (x != 4)
+                {
+                    x = MenuEditTask();
+                    switch (x)
+                    {
+                        default:
+                            Console.WriteLine("Opção inválida!!");
+                            break;
+                        case 1:
+                            TaskConcluided();
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     private static void PrintTask()
     {
     }
 
-    private static void EditTask()
-    {
-        //foreach (var item in listTodo)
-        //{
-        int x = 1;
-        while (x != 4)
-        {
-            x = MenuEditTask();
-            switch (x)
-            {
-                default:
-                    Console.WriteLine("Opção inválida!!");
-                    break;
-                case 1:
-                    TaskConcluided();
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-            }
-        }
-        //}
-    }
 
     private static void TaskConcluided()
     {
@@ -169,9 +185,6 @@ internal class Program
         return listTodo;
     }
 
-    private static void RemoveTask()
-    {
-    }
 
     private static void CreateTask()
     {
