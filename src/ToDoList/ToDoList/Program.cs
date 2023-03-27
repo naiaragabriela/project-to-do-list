@@ -299,6 +299,7 @@ internal class Program
                         TaskConcluided(listTodo);
                         break;
                     case 2:
+                        EditAnyTask();
                         break;
                     case 3:
                         break;
