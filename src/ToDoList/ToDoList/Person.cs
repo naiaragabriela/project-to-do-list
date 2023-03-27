@@ -5,13 +5,13 @@ namespace ToDoList
     internal class Person
     {
         public string Name { get; set; }
-        public Guid Id { get; set; }
+        public string IdPerson { get; set; }
 
-        public Person(string name, Guid id)
+        public Person(string name, string idPerson)
         {
             Name = name;
             var construtionID = Guid.NewGuid();
-            id = construtionID.ToString();
+            idPerson = construtionID.ToString();
         }
 
     }
