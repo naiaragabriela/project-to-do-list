@@ -30,7 +30,7 @@ namespace ToDoList
         }
         public string ToFile()
         {
-            return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
+            return $"ID:{Id}|\nData criada: {CriatedDate}|\nCategoria: {Category}|\nDescrição: {Description}|\nResponsável da tarefa: {Person}|\nStatus da tarefa: {Status}|\nData de Conclusão: {DueDate}";
         }
 
         public bool SetStatus()

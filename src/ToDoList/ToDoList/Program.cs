@@ -33,7 +33,7 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
-                    listTodo.Add(CreateTask(person));
+                    listTodo.Add(CreatTask(person));
                     WriteFileToDo(listTodo);
                     break;
                 case 2:
@@ -223,7 +223,7 @@ internal class Program
         }
     }
 
-    private static ToDo CreateTask(List<Person> person)
+    private static ToDo CreatTask(List<Person> person)
     {
         Console.WriteLine("Digite a descrição para a criação da tarefa: ");
         string descrição = Console.ReadLine();
