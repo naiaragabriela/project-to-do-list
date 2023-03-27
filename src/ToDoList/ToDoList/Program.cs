@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 using ToDoList;
@@ -19,6 +20,7 @@ internal class Program
         int option = 0;
         listTodo = LoadFromFile();
         person = LoadFromFilePerson();
+
         WriteFilePerson(person);
         do
         {
@@ -36,11 +38,13 @@ internal class Program
                     break;
                 case 2:
                     listTodo.Remove(RemoveTask());
+                    WriteFileToDo(listTodo);
                     break;
                 case 3:
                     MenuEditTask();
                     break;
                 case 4:
+                    PrintPerson(person);
                     break;
                 case 5:
                     System.Environment.Exit(0);
@@ -97,11 +101,11 @@ internal class Program
                 person.Add(newPerson);
             }
             sr.Close();
-            if (person == null)
+            if (person.Count == 0)
             {
                 Console.WriteLine("Digite seu nome");
                 var namePerson = Console.ReadLine();
-                Person personOwner= new Person(namePerson);
+                Person personOwner = new Person(namePerson);
                 person.Add(personOwner);
             }
             return person;
@@ -174,7 +178,36 @@ internal class Program
                 Thread.Sleep(1000);
             }
         }
+        ToDo CreateTask()
+        {
+            Console.WriteLine("Digite a descrição para a criação da tarefa: ");
+            string descrição = Console.ReadLine();
+            foreach (var item in person)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Console.Write("Digite o nome da pessoa para ser a responsável pela tarefa: ");
+            string nome = Console.ReadLine();
+
+            foreach (var item in person)
+            {
+                if (item.Name.Equals(nome))
+                {
+                    ToDo task = new ToDo(descrição, item);
+                    return task;
+                }
+            }
+            return null;
+        }
+        void PrintPerson(List<Person> person)
+        {
+            foreach(var item in person)
+            {
+                Console.WriteLine(item.SetName());
+            }
+        }
     }
+
 
     private static void PrintTask()
     {
@@ -252,14 +285,6 @@ internal class Program
     }
 
 
-    private static ToDo CreateTask()
-    {
-        Console.WriteLine("Digite a descrição para a criação da tarefa: ");
-        string descrição = Console.ReadLine();
-
-        ToDo task = new ToDo(descrição);
-        return task;
-    }
     private static int Menu(int options)
     {
         int option;
