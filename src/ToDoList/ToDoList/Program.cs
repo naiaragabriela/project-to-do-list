@@ -89,6 +89,13 @@ internal class Program
                 person.Add(newPerson);
             }
             sr.Close();
+            if (person == null)
+            {
+                Console.WriteLine("Digite seu nome");
+                var namePerson = Console.ReadLine();
+                Person personOwner= new Person(namePerson);
+                person.Add(personOwner);
+            }
             return person;
         }
 
@@ -183,8 +190,6 @@ internal class Program
     private static void TaskConcluided()
     {
     }
-
-
     private static int MenuEditTask()
     {
         int options;
@@ -225,11 +230,9 @@ internal class Program
     private static void RemoveTask()
     {
     }
-
     private static void CreateTask()
     {
     }
-
     private static int Menu(int options)
     {
         int option;
