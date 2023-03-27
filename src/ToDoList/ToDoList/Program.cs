@@ -8,8 +8,7 @@ internal class Program
         List<Person> pessoas = new List<Person>();
         List<Category> categorias = new List<Category>();
 
-        //LoadFromFile(listTodo);
-        //LoadFromFile(categorias);
+        LoadFromFile();
 
         int option = 0;
         do
@@ -26,15 +25,11 @@ internal class Program
                     RemoveTask();
                     break;
                 case 3:
-                    EditTask();
                     MenuEditTask();
                     break;
                 case 4:
                     break;
                 case 5:
-                    PrintTask();
-                    break;
-                case 6:
                     System.Environment.Exit(0);
                     break;
             }
@@ -47,44 +42,58 @@ internal class Program
 
     private static void EditTask()
     {
-        foreach (var item in listTodo)
+        //foreach (var item in listTodo)
+        //{
+        int x = 1;
+        while (x != 4)
         {
-            int x = 1;
-
-            while (x != 4)
+            x = MenuEditTask();
+            switch (x)
             {
-                x = MenuEditTask();
-                switch (x)
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                }
+                default:
+                    Console.WriteLine("Opção inválida!!");
+                    break;
+                case 1:
+                    TaskConcluided();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
             }
         }
+        //}
+    }
+
+    private static void TaskConcluided()
+    {
     }
 
     private static int MenuEditTask()
     {
         int options;
+
         Console.WriteLine("Menu de opções para edição das tarefas");
-        Console.WriteLine("1 - Marcar tarefa como concluída");
-        Console.WriteLine("2 - Mudar a tarefa de concluída para não concluída");
-        Console.WriteLine("3 - Editar/Adicionar Tarefas");
-        Console.WriteLine("4 - Mudar categorias da tarefa");
-        Console.WriteLine("5 - Mostrar tarefas");
+        Console.WriteLine("1 - Marcar status da tarefa");
+        Console.WriteLine("2 - Editar tarefa");
+        Console.WriteLine("3 - Mudar categorias da tarefa");
+        Console.WriteLine("4 - Mostrar tarefas");
+        Console.WriteLine("5 - Adicionar categorias");
         Console.WriteLine("6 - Sair");
-        Console.WriteLine("Escolha uma das opções");
+        Console.WriteLine("Escolha uma das opções: ");
+
+
         options = int.Parse(Console.ReadLine());
         return options;
     }
 
-    List<ToDo> LoadFromFile()
+    private static List<ToDo> LoadFromFile()
     {
         if (!File.Exists("ListToDo.txt"))
         {
@@ -95,11 +104,10 @@ internal class Program
         string textList = "";
         List<ToDo> listTodo = new List<ToDo>();
         while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
-        { 
+        {
             var values = textList.Split('|');
 
         }
-
         sr.Close();
         return listTodo;
     }
@@ -117,11 +125,14 @@ internal class Program
         int option;
         Console.WriteLine("Menu de opções");
         Console.WriteLine("1 - Adicionar tarefa");
-        Console.WriteLine("2- Remover tarefa");
-        Console.WriteLine("3 - Editar tarefa");
-        Console.WriteLine("4 - Sair");
-        Console.Write("Escolha uma das opções:");
+        Console.WriteLine("2 - Remover tarefa");
+        Console.WriteLine("3 - Editar/Adicionar Tarefas, Pessoas e Categorias");
+        Console.WriteLine("4 - Mostrar as pessoas já cadastradas");
+        Console.WriteLine("5 - Sair");
+        Console.Write("Escolha uma das opções: ");
+
         options = int.Parse(Console.ReadLine());
+        Console.WriteLine("\n\n");
         return options;
     }
 }
