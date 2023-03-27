@@ -5,7 +5,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        List<ToDo> listTodo = new List<ToDo>();
         List<Person> pessoas = new List<Person>();
         List<Category> categorias = new List<Category>();
 
@@ -60,8 +59,20 @@ internal class Program
         return options;
     }
 
-    private static void LoadFromFile()
+    List<ToDo> LoadFromFile()
     {
+        if(!File.Exists("ListToDo.txt"))
+        {
+            StreamWriter sw = new StreamWriter("ListToDo.txt");
+            sw.Close();
+        }
+        StreamReader sr = new StreamReader("ListToDo.txt");
+        string textList = "";
+        List<ToDo> listTodo = new List<ToDo>();
+        
+        // falta!!! ler o arquivo que está salvo e transformar cada informação da lista em objeto
+        sr.Close();
+        return listTodo;
     }
 
     private static void RemoveTask()
