@@ -10,10 +10,10 @@ namespace ToDoList
         {
 
         }
-        public Person(string name, string id)
+        public Person(string name)
         {
             var construtionID = Guid.NewGuid();
-            id = construtionID.ToString();
+            var id = construtionID.ToString();
             Id = id;
             Name = name;
         }
