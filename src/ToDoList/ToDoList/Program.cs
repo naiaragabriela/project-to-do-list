@@ -7,7 +7,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        LoadFromFile();
+        List <string> category = new List <string> ();
+        category.Add("Importante");
+        category.Add("Pessoal");
 
         int option = 0;
         do
@@ -52,15 +54,15 @@ internal class Program
                 var values = textList.Split('|');
                 ToDo newTodo = new ToDo();
                 newTodo.Id = values[0];
-                newTodo.CriatedDate = values[1];
+                newTodo.CriatedDate = DateTime.Parse(values[1]);
                 newTodo.Category = values[2]; 
                 newTodo.Description = values[3];
                 Person person = new Person();
                 person.Id = values[4];
                 person.Name= values[5];
                 newTodo.Person = person;
-                newTodo.Status = values[6];
-                newTodo.DueDate = values[7];
+                newTodo.Status = bool.Parse(values[6]);
+                newTodo.DueDate = DateTime.Parse(values[7]);
                 listTodo.Add(newTodo);
             }
             sr.Close();
