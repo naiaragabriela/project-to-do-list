@@ -41,7 +41,7 @@ internal class Program
                     WriteFileToDo(listTodo);
                     break;
                 case 3:
-                    MenuEditTask();
+                    EditTask(listTodo);
                     break;
                 case 4:
                     PrintPerson(person);
@@ -201,7 +201,7 @@ internal class Program
         }
         void PrintPerson(List<Person> person)
         {
-            foreach(var item in person)
+            foreach (var item in person)
             {
                 Console.WriteLine(item.SetName());
             }
@@ -209,9 +209,6 @@ internal class Program
     }
 
 
-    private static void PrintTask()
-    {
-    }
     private static void EditTask(List<ToDo> listTodo)
     {
         foreach (var item in listTodo)
@@ -233,6 +230,7 @@ internal class Program
                     case 3:
                         break;
                     case 4:
+                        PrintTask(listTodo);
                         break;
                     case 5:
                         break;
@@ -240,6 +238,13 @@ internal class Program
                         break;
                 }
             }
+        }
+    }
+    private static void PrintTask(List<ToDo> listTodo)
+    {
+        foreach(var item in listTodo)
+        {
+            Console.WriteLine(item.ToFile());
         }
     }
 
