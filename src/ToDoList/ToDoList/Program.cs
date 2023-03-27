@@ -4,6 +4,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        var date = DateTime.Now;
+        Console.WriteLine(date);
+
         int option = 0;
         do
         {
