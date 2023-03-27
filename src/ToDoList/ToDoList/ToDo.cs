@@ -33,16 +33,15 @@ namespace ToDoList
             return $"ID:{Id}|\nData criada: {CriatedDate}|\nCategoria: {Category}|\nDescrição: {Description}|\nResponsável da tarefa: {Person}|\nStatus da tarefa: {Status}|\nData de Conclusão: {DueDate}";
         }
 
-        public bool SetStatus()
+        public void SetStatus(int change)
         {
-            if (this.Status == true)
+            if (change == 1)
             {
-                return this.Status = false;
-
+                this.Status = true;
             }
-            else
+            if (change == 2)
             {
-                return this.Status = true;
+                this.Status = false;
             }
 
         }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Microsoft.VisualBasic;
+﻿
 using ToDoList;
 
 internal class Program
@@ -256,15 +251,17 @@ internal class Program
     private static ToDo TaskConcluided(List<ToDo> listTodo)
     {
         Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
-        var finished = Console.ReadLine();
+        var findTask = Console.ReadLine();
         Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
         Console.WriteLine("1-Alterar Status para finalizada | 2- Alterar Status para não finalizada");
         int change = int.Parse(Console.ReadLine());
         foreach (var item in listTodo)
         {
-            if (item.Description.Contains(finished))
+            if (item.Description.ToLower().Contains(findTask.ToLower()))
             {
-                item.SetStatus();
+             
+                item.SetStatus(change);
+
                 return item;
             }
         }
