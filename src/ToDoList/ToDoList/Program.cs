@@ -69,8 +69,12 @@ internal class Program
         StreamReader sr = new StreamReader("ListToDo.txt");
         string textList = "";
         List<ToDo> listTodo = new List<ToDo>();
-        
-        // falta!!! ler o arquivo que está salvo e transformar cada informação da lista em objeto
+        while (!string.IsNullOrEmpty(textList = sr.ReadLine()))
+        { 
+            var values = textList.Split('|');
+
+        }
+
         sr.Close();
         return listTodo;
     }

@@ -5,14 +5,23 @@ namespace ToDoList
     internal class Person
     {
         public string Name { get; set; }
-        public string IdPerson { get; set; }
+        public string Id { get; set; }
 
-        public Person(string name, string idPerson)
+        public Person(string name, string id)
         {
-            Name = name;
             var construtionID = Guid.NewGuid();
-            idPerson = construtionID.ToString();
+            id = construtionID.ToString();
+            Id = id;
+            Name = name;
         }
 
+        public override string ToString()
+        {
+            return $"{Id}|{Name}";
+        }
+        public string ToUser()
+        {
+            return $"Id pessoa: {Id} \nNome: {Name}\n";
+        }
     }
 }
