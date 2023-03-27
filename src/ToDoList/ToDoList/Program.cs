@@ -226,6 +226,7 @@ internal class Program
                         TaskConcluided();
                         break;
                     case 2:
+                        EditAnyTask();
                         break;
                     case 3:
                         break;
@@ -240,6 +241,12 @@ internal class Program
             }
         }
     }
+
+    private static void EditAnyTask()
+    {
+
+    }
+
     private static void PrintTask(List<ToDo> listTodo)
     {
         foreach(var item in listTodo)
