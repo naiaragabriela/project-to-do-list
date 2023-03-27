@@ -40,7 +40,7 @@ internal class Program
                     WriteFileToDo(listTodo);
                     break;
                 case 3:
-                    MenuEditTask();
+                    EditTask(listTodo);
                     break;
                 case 4:
                     PrintPerson(person);
@@ -264,6 +264,44 @@ internal class Program
                     }
                 }
             }
+        }
+    }
+    private static void EditTask(List<ToDo> listTodo)
+    {
+        foreach (var item in listTodo)
+        {
+            int x = 1;
+            while (x != 4)
+            {
+                x = MenuEditTask();
+                switch (x)
+                {
+                    default:
+                        Console.WriteLine("Opção inválida!!");
+                        break;
+                    case 1:
+                        TaskConcluided();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        PrintTask(listTodo);
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                }
+            }
+        }
+    }
+    private static void PrintTask(List<ToDo> listTodo)
+    {
+        foreach(var item in listTodo)
+        {
+            Console.WriteLine(item.ToFile());
         }
     }
 
