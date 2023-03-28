@@ -320,4 +320,32 @@ internal class Program
         }
         return null;
     }
+
+    private static void EditAnyTask(List<ToDo> todolist, List<Person> person)
+    {
+        PrintTask(todolist);
+        Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer editar");
+        var palavra = Console.ReadLine();
+        string description = "";
+        foreach (var item in todolist)
+        {
+            if (item.Description.Contains(palavra))
+            {
+                Console.Write("Digite a descrição nova para a tarefa: ");
+                description = Console.ReadLine() + "\n\n";
+                item.Description = description;
+                PrintPerson(person);
+                Console.WriteLine("Agora digite um nome entre os nomes de pessoas registradas para\n");
+                Console.WriteLine("referencia-la na tarefa");
+                string name = Console.ReadLine();
+                foreach(var items in person)
+                {
+                    if (items.Name.Equals(name))
+                    {
+                        item.Person = items;
+                    }
+                }
+            }
+        }
+    }
 }
