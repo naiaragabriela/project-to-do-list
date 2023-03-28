@@ -1,4 +1,4 @@
-# project-to-do-list!
+# project-to-do-list!  https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f4dd.png
 
 
 O que é to do list?
