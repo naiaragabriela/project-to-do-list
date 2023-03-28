@@ -1,23 +1,22 @@
-﻿
-using ToDoList;
+﻿using ToDoList;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        List<string> category = new List<string>();
-        List<ToDo> listTodo = new List<ToDo>();
-        List<Person> person = new List<Person>();
+        List<string> categories = new List<string>();
+        List<ToDo> toDoList = new List<ToDo>();
+        List<Person> personList = new List<Person>();
 
-        category.Add("Importante");
-        category.Add("Pessoal");
-        category.Add("Profissional");
+        categories.Add("Importante");
+        categories.Add("Pessoal");
+        categories.Add("Profissional");
 
         int option = 0;
-        listTodo = LoadFromFile(listTodo);
-        person = LoadFromFilePerson(person);
+        toDoList = LoadFromFile(toDoList);
+        personList = LoadFromFilePerson(personList);
 
-        WriteFilePerson(person);
+        WriteFilePerson(personList);
         do
         {
 
@@ -28,18 +27,18 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
-                    listTodo.Add(CreatTask(person));
-                    WriteFileToDo(listTodo);
+                    toDoList.Add(CreateTask(personList, categories));
+                    WriteFileToDo(toDoList);
                     break;
                 case 2:
-                    listTodo.Remove(RemoveTask(listTodo));
-                    WriteFileToDo(listTodo);
+                    toDoList.Remove(RemoveTask(toDoList));
+                    WriteFileToDo(toDoList);
                     break;
                 case 3:
-                    EditTask(listTodo);
+                    EditTask(toDoList, categories);
                     break;
                 case 4:
-                    PrintPerson(person);
+                    PrintPerson(personList);
                     break;
                 case 5:
                     System.Environment.Exit(0);
@@ -48,32 +47,6 @@ internal class Program
         } while (option != 4);
     }
     
-    private static void PrintTask(List<ToDo> listTodo)
-    {
-        foreach (var item in listTodo)
-        {
-            Console.WriteLine(item.ToFile());
-        }
-    }
-    
-    private static int MenuEditTask()
-    {
-        int options;
-
-        Console.WriteLine("Menu de opções para edição das tarefas");
-        Console.WriteLine("1 - Marcar status da tarefa");
-        Console.WriteLine("2 - Editar tarefa");
-        Console.WriteLine("3 - Mudar categorias da tarefa");
-        Console.WriteLine("4 - Mostrar tarefas");
-        Console.WriteLine("5 - Adicionar categorias");
-        Console.WriteLine("6 - Sair");
-        Console.WriteLine("Escolha uma das opções: ");
-
-
-        options = int.Parse(Console.ReadLine());
-        return options;
-    }
-
     private static int Menu(int options)
     {
         int option;
@@ -89,8 +62,22 @@ internal class Program
         Console.WriteLine("\n\n");
         return options;
     }
-    
-    private static List<ToDo> LoadFromFile(List<ToDo> listTodo)
+    private static int MenuEditTask()
+    {
+        int options;
+
+        Console.WriteLine("Menu de opções para edição das tarefas");
+        Console.WriteLine("1 - Marcar status da tarefa");
+        Console.WriteLine("2 - Editar tarefa");
+        Console.WriteLine("3 - Mudar categorias da tarefa");
+        Console.WriteLine("4 - Mostrar tarefas");
+        Console.WriteLine("5 - Sair");
+        Console.WriteLine("Escolha uma das opções: ");
+
+        options = int.Parse(Console.ReadLine());
+        return options;
+    }
+    private static List<ToDo> LoadFromFile(List<ToDo> toDoList)
     {
         if (!File.Exists("ListToDo.txt"))
         {
@@ -114,13 +101,12 @@ internal class Program
             person.Id = values[6];
             person.Name = values[7];
             newTodo.Person = person;
-            listTodo.Add(newTodo);
+            toDoList.Add(newTodo);
         }
         sr.Close();
-        return listTodo;
+        return toDoList;
     }
-
-    private static List<Person> LoadFromFilePerson(List<Person> person)
+    private static List<Person> LoadFromFilePerson(List<Person> personList)
     {
         if (!File.Exists("ListPerson.txt"))
         {
@@ -129,33 +115,32 @@ internal class Program
         }
         
         StreamReader sr = new StreamReader("ListPerson.txt");
-        string personList = "";
+        string people = "";
 
-        while (!string.IsNullOrEmpty(personList = sr.ReadLine()))
+        while (!string.IsNullOrEmpty(people = sr.ReadLine()))
         {
-            var values = personList.Split('|');
+            var values = people.Split('|');
             Person newPerson = new Person();
             newPerson.Id = values[0];
             newPerson.Name = values[1];
-            person.Add(newPerson);
+            personList.Add(newPerson);
         }
         sr.Close();
 
-        if (person.Count == 0)
+        if (personList.Count == 0)
         {
             Console.WriteLine("Digite seu nome");
             var namePerson = Console.ReadLine();
             Person personOwner = new Person(namePerson);
-            person.Add(personOwner);
+            personList.Add(personOwner);
         }
 
-        return person;
+        return personList;
     }
-
-    private static void WriteFileToDo(List<ToDo> list)
+    private static void WriteFileToDo(List<ToDo> toDoList)
     {
         string toDo = "";
-        foreach (ToDo textList in list)
+        foreach (ToDo textList in toDoList)
         {
             toDo += textList.ToString() + "\n";
         }
@@ -178,35 +163,19 @@ internal class Program
             Thread.Sleep(1000);
         }
     }
-
-    private static ToDo RemoveTask(List<ToDo> listTodo)
+    private static void WriteFilePerson(List<Person> personList)
     {
-        Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
-        var palavra = Console.ReadLine();
-
-        foreach (var item in listTodo)
+        string people = "";
+        foreach (Person person in personList)
         {
-            if (item.Description.Contains(palavra))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    private static void WriteFilePerson(List<Person> people)
-    {
-        string person = "";
-        foreach (Person personList in people)
-        {
-            person += personList.ToString() + "\n";
+            people += personList.ToString() + "\n";
         }
         try
         {
             StreamWriter sw = new StreamWriter("ListPerson.txt");
-            if (!string.IsNullOrWhiteSpace(person))
+            if (!string.IsNullOrWhiteSpace(people))
             {
-                sw.WriteLine(person);
+                sw.WriteLine(people);
             }
             sw.Close();
         }
@@ -220,45 +189,109 @@ internal class Program
             Thread.Sleep(1000);
         }
     }
+    private static void PrintPerson(List<Person> personList)
+    {
+        foreach (var item in personList)
+        {
+            Console.WriteLine(item.SetName());
+        }
+    }
+    private static void EditTask(List<ToDo> toDoList, List<string> categories)
+    {
+        foreach (var item in toDoList)
+        {
+            int x = 1;
+            int index = 0;
+            while (x != 4)
+            {
+                x = MenuEditTask();
+                switch (x)
+                {
+                    default:
+                        Console.WriteLine("Opção inválida!!");
+                        break;
+                    case 1:
+                        var taskCompleted = ChangeTaskToCompleted(toDoList);
+                        index = toDoList.IndexOf(taskCompleted);
+                        toDoList[index] = taskCompleted;
+                        WriteFileToDo(toDoList);
+                        break;
+                    case 2:
+                       // EditAnyTask();
+                       //tem que ter o edit pessoa
+                       //edit descrição
+                       //edit datafinal 
+                        break;
+                    case 3:
+                        var taskChanged = ChangeTaskCategory(toDoList, categories);
+                        index = toDoList.IndexOf(taskChanged);
+                        toDoList[index] = taskChanged;
+                        WriteFileToDo(toDoList);
+                        break;
+                    case 4:
+                        PrintTask(toDoList);
+                        break;
+                    case 5:
+                        break;
+                }
+            }
+        }
+    }
+    private static void PrintTask(List<ToDo> toDoList)
+    {
+        foreach (var item in toDoList)
+        {
+            Console.WriteLine(item.ToFile());
+        }
+    }
+    private static ToDo RemoveTask(List<ToDo> toDoList)
+    {
+        Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer excluir");
+        var palavra = Console.ReadLine();
 
-    private static ToDo CreatTask(List<Person> person)
+        foreach (var item in toDoList)
+        {
+            if (item.Description.Contains(palavra))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+    private static ToDo CreateTask(List<Person> personList, List<string> categories)
     {
         Console.WriteLine("Digite a descrição para a criação da tarefa: ");
-        string descrição = Console.ReadLine();
-        foreach (var item in person)
+        string description = Console.ReadLine();
+        foreach (var item in personList)
         {
             Console.WriteLine(item.ToString());
         }
-        Console.Write("Digite o nome da pessoa para ser a responsável pela tarefa: ");
+        Console.WriteLine("Digite o nome da pessoa para ser a responsável pela tarefa: ");
         string nome = Console.ReadLine();
 
-        foreach (var item in person)
+        Console.WriteLine("Digite o número da categoria da sua tarefa: (0) Importante | (1) Pessoal | (2)Profisisonal");
+        int indexCategory = int.Parse(Console.ReadLine());
+
+        foreach (var item in personList)
         {
             if (item.Name.Equals(nome))
             {
-                ToDo task = new ToDo(descrição, item);
+                ToDo task = new ToDo(description);
+                task.SetPerson(item);
+                task.Category = categories[indexCategory]; 
                 return task;
             }
         }
         return null;
     }
-
-    private static void PrintPerson(List<Person> person)
-    {
-        foreach (var item in person)
-        {
-            Console.WriteLine(item.SetName());
-        }
-    }
-
-    private static ToDo TaskConcluided(List<ToDo> listTodo)
+    private static ToDo ChangeTaskToCompleted(List<ToDo> toDoList)
     {
         Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
         var findTask = Console.ReadLine();
         Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
         Console.WriteLine("1-Alterar Status para finalizada | 2- Alterar Status para não finalizada");
         int change = int.Parse(Console.ReadLine());
-        foreach (var item in listTodo)
+        foreach (var item in toDoList)
         {
             if (item.Description.ToLower().Contains(findTask.ToLower()))
             {
@@ -270,38 +303,21 @@ internal class Program
         }
         return null;
     }
-
-    private static void EditTask(List<ToDo> listTodo)
+    private static ToDo ChangeTaskCategory(List<ToDo> toDoList, List<string>categories)
     {
-        foreach (var item in listTodo)
+        Console.WriteLine("Digite uma palavra da descrição da tarefa que você alterar a categoria");
+        var findTask = Console.ReadLine();
+        Console.WriteLine("Digite o número da categoria da sua tarefa: (0) Importante | (1) Pessoal | (2)Profisisonal");
+        int indexCategory = int.Parse(Console.ReadLine());
+        foreach (var item in toDoList)
         {
-            int x = 1;
-            while (x != 4)
+            if (item.Description.ToLower().Contains(findTask.ToLower()))
             {
-                x = MenuEditTask();
-                switch (x)
-                {
-                    default:
-                        Console.WriteLine("Opção inválida!!");
-                        break;
-                    case 1:
-                        TaskConcluided(listTodo);
-                        break;
-                    case 2:
-                       // EditAnyTask();
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        PrintTask(listTodo);
-                        break;
-                    case 5:
-                        break;
-                    case 6:
-                        break;
-                }
+
+                item.Category = categories[indexCategory];
+                return item;
             }
         }
+        return null;
     }
-
 }
