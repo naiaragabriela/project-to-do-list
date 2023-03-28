@@ -127,6 +127,7 @@ internal class Program
             StreamWriter sw = new StreamWriter("ListPerson.txt");
             sw.Close();
         }
+        
         StreamReader sr = new StreamReader("ListPerson.txt");
         string personList = "";
 
@@ -139,6 +140,7 @@ internal class Program
             person.Add(newPerson);
         }
         sr.Close();
+
         if (person.Count == 0)
         {
             Console.WriteLine("Digite seu nome");
@@ -146,6 +148,7 @@ internal class Program
             Person personOwner = new Person(namePerson);
             person.Add(personOwner);
         }
+
         return person;
     }
 
@@ -285,7 +288,7 @@ internal class Program
                         TaskConcluided(listTodo);
                         break;
                     case 2:
-                        //EditAnyTask();
+                       // EditAnyTask();
                         break;
                     case 3:
                         break;

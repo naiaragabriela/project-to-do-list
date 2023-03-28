@@ -13,7 +13,7 @@ namespace ToDoList
 
         public ToDo()
         { }
-        public ToDo(string description, Person person)
+        public ToDo(string description)
         {
             var construtionID = Guid.NewGuid();
             var id = construtionID.ToString();
@@ -22,7 +22,7 @@ namespace ToDoList
             CriatedDate = date;
             Description = description;
             //DueDate = duodate;
-            Person = person;
+          
         }
         public override string ToString()
         {
@@ -43,15 +43,11 @@ namespace ToDoList
             {
                 this.Status = false;
             }
-
         }
-        //public string SetPerson()
-        //{
-
-        //    return null;
-
-
-        //}
+        public void SetPerson(Person person)
+        {
+            this.Person = person;
+        }
     }
 
 }
