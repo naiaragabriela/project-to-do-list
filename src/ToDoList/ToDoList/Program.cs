@@ -20,7 +20,6 @@ internal class Program
         WriteFilePerson(personList);
         do
         {
-
             option = Menu(option);
             switch (option)
             {
@@ -135,7 +134,18 @@ internal class Program
             Person personOwner = new Person(namePerson);
             personList.Add(personOwner);
         }
-
+        else
+        {
+            Console.WriteLine("Você gostaria de adiconar outra pessoa? Digite 1 para sim e 2 para não: ");
+            int option = int.Parse(Console.ReadLine());
+            if (option == 1)
+            {
+                Console.Write("Digite o nome da nova pessoa: ");
+                var name = Console.ReadLine();
+                Person newPerson = new Person(name);
+                personList.Add(newPerson);
+            }
+        }
         return personList;
     }
     private static void WriteFileToDo(List<ToDo> toDoList)
@@ -176,7 +186,10 @@ internal class Program
             StreamWriter sw = new StreamWriter("ListPerson.txt");
             if (!string.IsNullOrWhiteSpace(people))
             {
-                sw.WriteLine(people);
+                foreach (Person person in personList)
+                {
+                    sw.WriteLine(person.ToString());
+                }
             }
             sw.Close();
         }
