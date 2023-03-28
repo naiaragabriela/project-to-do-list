@@ -1,5 +1,4 @@
-# project-to-do-list!  https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f4dd.png
-
+# project-to-do-list! 
 
 O que é to do list?
 
@@ -19,3 +18,6 @@ Os benefícios de um to do List podem ser:
 O poder do to do list neste sentido está em alcançar um nível de compressão maior para tomada de decisão consciente, descobrindo mais sobre você e sua performance!
 
 
+Colaboradores
+@TiagoFSDC 
+@naiaragabriela 
