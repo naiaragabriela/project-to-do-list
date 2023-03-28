@@ -1,4 +1,5 @@
-﻿using ToDoList;
+﻿using System;
+using ToDoList;
 
 internal class Program
 {
@@ -35,7 +36,7 @@ internal class Program
                     WriteFileToDo(toDoList);
                     break;
                 case 3:
-                    EditTask(toDoList, categories);
+                    EditTask(toDoList, categories, personList);
                     break;
                 case 4:
                     PrintPerson(personList);
@@ -196,7 +197,7 @@ internal class Program
             Console.WriteLine(item.SetName());
         }
     }
-    private static void EditTask(List<ToDo> toDoList, List<string> categories)
+    private static void EditTask(List<ToDo> toDoList, List<string> categories, List<Person> personList)
     {
         foreach (var item in toDoList)
         {
@@ -217,10 +218,8 @@ internal class Program
                         WriteFileToDo(toDoList);
                         break;
                     case 2:
-                       // EditAnyTask();
-                       //tem que ter o edit pessoa
-                       //edit descrição
-                       //edit datafinal 
+                        EditAnyTask(toDoList, personList);
+                        WriteFileToDo(toDoList);
                         break;
                     case 3:
                         var taskChanged = ChangeTaskCategory(toDoList, categories);
@@ -320,25 +319,24 @@ internal class Program
         }
         return null;
     }
-
-    private static void EditAnyTask(List<ToDo> todolist, List<Person> person)
+    private static void EditAnyTask(List<ToDo> toDoList, List<Person> personList)
     {
-        PrintTask(todolist);
+        PrintTask(toDoList);
         Console.WriteLine("Digite uma palavra da descrição da tarefa que você quer editar");
-        var palavra = Console.ReadLine();
+        var word = Console.ReadLine();
         string description = "";
-        foreach (var item in todolist)
+        foreach (var item in toDoList)
         {
-            if (item.Description.Contains(palavra))
+            if (item.Description.Contains(word))
             {
                 Console.Write("Digite a descrição nova para a tarefa: ");
                 description = Console.ReadLine() + "\n\n";
                 item.Description = description;
-                PrintPerson(person);
+                PrintPerson(personList);
                 Console.WriteLine("Agora digite um nome entre os nomes de pessoas registradas para\n");
                 Console.WriteLine("referencia-la na tarefa");
                 string name = Console.ReadLine();
-                foreach(var items in person)
+                foreach(var items in personList)
                 {
                     if (items.Name.Equals(name))
                     {
