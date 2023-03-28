@@ -12,8 +12,8 @@ namespace ToDoList
         public bool Status { get; set; }
 
         public ToDo()
-        {}
-        public ToDo(string description, Person person)
+        { }
+        public ToDo(string description)
         {
             var construtionID = Guid.NewGuid();
             var id = construtionID.ToString();
@@ -22,21 +22,32 @@ namespace ToDoList
             CriatedDate = date;
             Description = description;
             //DueDate = duodate;
-            Person = person;
+          
         }
         public override string ToString()
         {
             return $"{Id}|{CriatedDate}|{Description}|{Status}|{DueDate}|{Category}|{Person}";
         }
-        public string ToFile() 
-        { 
-        return $"ID:{Id}|Data criada: {CriatedDate}|{Category}|{Description}|{Person}|{Status}|{DueDate}";
+        public string ToFile()
+        {
+            return $"ID:{Id}|\nData criada: {CriatedDate}|\nCategoria: {Category}|\nDescrição: {Description}|\nResponsável da tarefa: {Person}|\nStatus da tarefa: {Status}|\nData de Conclusão: {DueDate}";
         }
 
-        public bool SetStatus()
+        public void SetStatus(int change)
         {
-            return false ;
+            if (change == 1)
+            {
+                this.Status = true;
+            }
+            if (change == 2)
+            {
+                this.Status = false;
+            }
+        }
+        public void SetPerson(Person person)
+        {
+            this.Person = person;
         }
     }
-    
+
 }

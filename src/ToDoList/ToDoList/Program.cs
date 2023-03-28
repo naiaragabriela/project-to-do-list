@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Microsoft.VisualBasic;
+﻿
 using ToDoList;
 
 internal class Program
@@ -33,7 +28,7 @@ internal class Program
                     Console.WriteLine("Opção inválida");
                     break;
                 case 1:
-                    listTodo.Add(CreateTask(person));
+                    listTodo.Add(CreatTask(person));
                     WriteFileToDo(listTodo);
                     break;
                 case 2:
@@ -52,6 +47,7 @@ internal class Program
             }
         } while (option != 4);
     }
+    
     private static void PrintTask(List<ToDo> listTodo)
     {
         foreach (var item in listTodo)
@@ -59,7 +55,7 @@ internal class Program
             Console.WriteLine(item.ToFile());
         }
     }
-
+    
     private static int MenuEditTask()
     {
         int options;
@@ -93,6 +89,7 @@ internal class Program
         Console.WriteLine("\n\n");
         return options;
     }
+    
     private static List<ToDo> LoadFromFile(List<ToDo> listTodo)
     {
         if (!File.Exists("ListToDo.txt"))
@@ -130,6 +127,7 @@ internal class Program
             StreamWriter sw = new StreamWriter("ListPerson.txt");
             sw.Close();
         }
+        
         StreamReader sr = new StreamReader("ListPerson.txt");
         string personList = "";
 
@@ -142,6 +140,7 @@ internal class Program
             person.Add(newPerson);
         }
         sr.Close();
+
         if (person.Count == 0)
         {
             Console.WriteLine("Digite seu nome");
@@ -149,6 +148,7 @@ internal class Program
             Person personOwner = new Person(namePerson);
             person.Add(personOwner);
         }
+
         return person;
     }
 
@@ -221,7 +221,7 @@ internal class Program
         }
     }
 
-    private static ToDo CreateTask(List<Person> person)
+    private static ToDo CreatTask(List<Person> person)
     {
         Console.WriteLine("Digite a descrição para a criação da tarefa: ");
         string descrição = Console.ReadLine();
@@ -254,23 +254,17 @@ internal class Program
     private static ToDo TaskConcluided(List<ToDo> listTodo)
     {
         Console.WriteLine("Digite uma palavra da descrição da tarefa que você deseja alterar o status:");
-        var finished = Console.ReadLine();
+        var findTask = Console.ReadLine();
         Console.WriteLine("Digite o número do que você deseja fazer de alteração:");
-        Console.WriteLine("1-Alterar Status para finalizada |   2- Alterar Status para não finalizada");
+        Console.WriteLine("1-Alterar Status para finalizada | 2- Alterar Status para não finalizada");
         int change = int.Parse(Console.ReadLine());
-
         foreach (var item in listTodo)
         {
-            if (item.Description.Contains(finished))
+            if (item.Description.ToLower().Contains(findTask.ToLower()))
             {
-                if (change == 1)
-                {
-                    item.Status = true;
-                }
-                if (change == 2)
-                {
-                    item.Status = false;
-                }
+             
+                item.SetStatus(change);
+
                 return item;
             }
         }
