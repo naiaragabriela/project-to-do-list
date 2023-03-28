@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualBasic;
 using ToDoList;
 
 internal class Program
@@ -44,7 +45,7 @@ internal class Program
                     System.Environment.Exit(0);
                     break;
             }
-        } while (option != 4);
+        } while (option != 5);
     }
     
     private static int Menu(int options)
@@ -138,13 +139,15 @@ internal class Program
         {
             Console.WriteLine("Você gostaria de adiconar outra pessoa? Digite 1 para sim e 2 para não: ");
             int option = int.Parse(Console.ReadLine());
-            if (option == 1)
+            while (option == 1)
             {
                 Console.Write("Digite o nome da nova pessoa: ");
                 var name = Console.ReadLine();
                 Person newPerson = new Person(name);
                 personList.Add(newPerson);
-            }
+                Console.WriteLine("Você gostaria de adiconar outra pessoa? Digite 1 para sim e 2 para não: ");
+                option = int.Parse(Console.ReadLine());
+            }  
         }
         return personList;
     }
@@ -212,11 +215,9 @@ internal class Program
     }
     private static void EditTask(List<ToDo> toDoList, List<string> categories, List<Person> personList)
     {
-        foreach (var item in toDoList)
-        {
             int x = 1;
             int index = 0;
-            while (x != 4)
+            while (x != 5)
             {
                 x = MenuEditTask();
                 switch (x)
@@ -247,7 +248,6 @@ internal class Program
                         break;
                 }
             }
-        }
     }
     private static void PrintTask(List<ToDo> toDoList)
     {
@@ -274,6 +274,7 @@ internal class Program
     {
         Console.WriteLine("Digite a descrição para a criação da tarefa: ");
         string description = Console.ReadLine();
+        Console.WriteLine("Escolha um nome da lista abaixo: ");
         foreach (var item in personList)
         {
             Console.WriteLine(item.ToString());
@@ -284,6 +285,10 @@ internal class Program
         Console.WriteLine("Digite o número da categoria da sua tarefa: (0) Importante | (1) Pessoal | (2)Profisisonal");
         int indexCategory = int.Parse(Console.ReadLine());
 
+        Console.WriteLine("Digite a data no formato 'dd/mm/yyyy', o horário 'HH:MM:SS' de conclusão da tarefa: ");
+        string duedate=Console.ReadLine();
+        DateTime dtData = DateTime.Parse(duedate);
+
         foreach (var item in personList)
         {
             if (item.Name.Equals(nome))
@@ -291,9 +296,12 @@ internal class Program
                 ToDo task = new ToDo(description);
                 task.SetPerson(item);
                 task.Category = categories[indexCategory]; 
+                task.DueDate = dtData;
                 return task;
             }
         }
+
+
         return null;
     }
     private static ToDo ChangeTaskToCompleted(List<ToDo> toDoList)
