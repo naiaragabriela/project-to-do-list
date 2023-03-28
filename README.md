@@ -1,4 +1,4 @@
-# project-to-do-list! [image](https://user-images.githubusercontent.com/126898837/228116112-c5855cd8-28f7-49b4-b181-6a5b62c42e72.png)
+# project-to-do-list!
 
 
 O que é to do list?
